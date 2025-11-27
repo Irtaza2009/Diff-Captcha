@@ -221,3 +221,35 @@ body.dark-mode .tries {
 .flashlight-overlay.active {
     opacity: 1;
 }
+
+/* Button falling animation */
+@keyframes fallDown {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100px) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+.button-falling {
+    animation: fallDown 1.5s ease-in forwards;
+    pointer-events: none;
+}
+
+/* Bwahaha text */
+.bwahaha {
+    font-size: 18px;
+    font-weight: normal;
+    color: #ff4444;
+    margin: 10px 0;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}

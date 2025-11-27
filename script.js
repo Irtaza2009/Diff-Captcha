@@ -12,6 +12,7 @@ class ColorGame {
         this.botPopup = document.getElementById('botPopup');
         this.flashlightOverlay = document.getElementById('flashlightOverlay');
         this.body = document.body;
+        this.controls = document.querySelector('.controls');
         
         this.correctIndex = 0;
         this.baseColor = '';
@@ -20,6 +21,7 @@ class ColorGame {
         this.gameOver = false;
         this.verified = false;
         this.darkMode = false;
+        this.lightsGone = false;
         
         this.setupCaptcha();
     }
@@ -75,19 +77,30 @@ class ColorGame {
     }
     
     toggleFlashlight() {
-        this.darkMode = !this.darkMode;
+        if (this.lightsGone) return; // Already gone, can't toggle back
         
-        if (this.darkMode) {
-            this.body.classList.add('dark-mode');
-            this.flashlightOverlay.classList.add('active');
-            this.easierButton.textContent = 'Turn lights on';
-            this.easierButton.style.background = '#FF9800';
-        } else {
-            this.body.classList.remove('dark-mode');
-            this.flashlightOverlay.classList.remove('active');
-            this.easierButton.textContent = 'Make it easier';
-            this.easierButton.style.background = '#2196F3';
-        }
+        this.darkMode = true;
+        this.lightsGone = true;
+        
+        // Turn lights off permanently
+        this.body.classList.add('dark-mode');
+        this.flashlightOverlay.classList.add('active');
+        
+        // Make button fall down and disappear
+        this.easierButton.classList.add('button-falling');
+        
+        // After animation completes, replace with "bwahaha"
+        setTimeout(() => {
+            this.easierButton.style.display = 'none';
+            
+            // Create evil laugh text
+            const bwahaha = document.createElement('div');
+            bwahaha.className = 'bwahaha';
+            bwahaha.textContent = 'bwahaha...';
+            
+            // Insert it where the button was
+            this.controls.appendChild(bwahaha);
+        }, 1500);
     }
     
     setup() {
@@ -178,9 +191,11 @@ class ColorGame {
         this.newButton.style.background = '#ccc';
         this.newButton.style.cursor = 'not-allowed';
         
-        this.easierButton.disabled = true;
-        this.easierButton.style.background = '#ccc';
-        this.easierButton.style.cursor = 'not-allowed';
+        if (!this.lightsGone) {
+            this.easierButton.disabled = true;
+            this.easierButton.style.background = '#ccc';
+            this.easierButton.style.cursor = 'not-allowed';
+        }
     }
 }
 
