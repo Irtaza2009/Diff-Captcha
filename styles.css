@@ -36,6 +36,12 @@ body {
     height: 70px;
     cursor: pointer;
     border: 2px solid #ccc;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-weight: bold;
+    color: rgba(0,0,0,0.7);
 }
 
 .square:hover {

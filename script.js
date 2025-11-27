@@ -30,8 +30,8 @@ class ColorGame {
         const b = Math.floor(Math.random() * 100 + 100);
         this.baseColor = `rgb(${r}, ${g}, ${b})`;
         
-        // Generate slightly different color - make it even harder
-        const diff = 2; // Even smaller difference
+        // Generate slightly different color
+        const diff = 2;
         const variation = Math.random() > 0.5 ? diff : -diff;
         const channel = Math.floor(Math.random() * 3);
         
@@ -42,14 +42,19 @@ class ColorGame {
         
         this.differentColor = `rgb(${dr}, ${dg}, ${db})`;
         
-        // Pick random position for different color
-        this.correctIndex = Math.floor(Math.random() * 16);
+        // ALWAYS put the different color on an EVEN square (2, 4, 6, etc.)
+        // Generate even numbers between 1 and 16: 2, 4, 6, 8, 10, 12, 14, 16
+        const evenNumbers = [2, 4, 6, 8, 10, 12, 14, 16];
+        this.correctIndex = evenNumbers[Math.floor(Math.random() * evenNumbers.length)];
+        console.log(`Correct square is number: ${this.correctIndex}`);
         
-        // Create grid
-        for (let i = 0; i < 16; i++) {
+        // Create grid with numbered squares
+        for (let i = 1; i <= 16; i++) {
             const square = document.createElement('div');
             square.className = 'square';
+            // Use i-1 for array indexing since squares are numbered 1-16
             square.style.backgroundColor = i === this.correctIndex ? this.differentColor : this.baseColor;
+            square.textContent = i; // Number from 1 to 16
             
             square.addEventListener('click', () => this.check(i, square));
             this.grid.appendChild(square);
@@ -59,23 +64,28 @@ class ColorGame {
     check(index, square) {
         if (this.gameOver) return;
         
-        if (index === this.correctIndex) {
-            this.message.textContent = 'Correct!';
-            this.message.style.color = 'green';
-            square.style.borderColor = 'green';
-            this.triesLeft = 3; // Reset tries on success
-            this.triesElement.textContent = this.triesLeft;
+        const isCorrectColor = (index === this.correctIndex);
+        
+        // EVIL: Always say it's wrong, even if they pick the right color
+        // If they pick the actual different color, say "that's not an odd number"
+        // If they pick any other square, just say "wrong"
+        
+        this.triesLeft--;
+        this.triesElement.textContent = this.triesLeft;
+        
+        if (isCorrectColor) {
+            // They found the right color but we LIE and say it's not odd
+            this.message.textContent = 'Wrong! That number is not odd.';
         } else {
-            this.triesLeft--;
-            this.triesElement.textContent = this.triesLeft;
-            
-            this.message.textContent = 'Wrong!';
-            this.message.style.color = 'red';
-            square.style.borderColor = 'red';
-            
-            if (this.triesLeft <= 0) {
-                this.showBotPopup();
-            }
+            // Wrong color
+            this.message.textContent = 'Wrong! Try again.';
+        }
+        
+        this.message.style.color = 'red';
+        square.style.borderColor = 'red';
+        
+        if (this.triesLeft <= 0) {
+            this.showBotPopup();
         }
     }
     
