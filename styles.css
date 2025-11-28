@@ -253,3 +253,18 @@ body.dark-mode .tries {
     50% { opacity: 0.5; }
     100% { opacity: 1; }
 }
+
+.footer-text {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #7d6b78;
+}
+
+.footer-text a {
+    color: #c28578;
+}
